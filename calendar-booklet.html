@@ -167,7 +167,7 @@
 			.sheet.back  .a5.right { order: 3; }
 			.sheet.front .a5.left  { order: 4; }
 			/* Ensure footer appears at the end on screen and sits near content */
-			.cc0-footer { order: 5; margin-top: 4mm; margin-bottom: 8mm; }
+			.cc0-footer { order: 5; margin-top: 4mm; margin-bottom: 8mm; width: 100%; max-width: 680px; padding: 0 6mm; text-align: center; }
 		}
 
 		/* Mobile-friendly screen layout adjustments */
@@ -180,6 +180,8 @@
 			.sheet .a5.left .content,
 			.sheet .a5.right .header,
 			.sheet .a5.right .content { margin-left: 6mm; margin-right: 6mm; }
+			/* Hide ring binder holes on mobile/tablet */
+			.a5 .hole { display: none; }
 			/* Use two columns for month grid on tablets */
 			.content .calendar { grid-template-columns: repeat(2, 1fr); }
 			/* Slightly larger text for readability */
@@ -195,7 +197,9 @@
 			.content .month { font-size: 10pt; }
 			.content .day { font-size: 102%; line-height: 1.15; }
 			/* Footer spacing tighter on small screens */
-			.cc0-footer { margin-top: 3mm; margin-bottom: 6mm; }
+			.cc0-footer { margin-top: 3mm; margin-bottom: 6mm; padding: 0 6mm; }
+			/* Ensure holes remain hidden on phones */
+			.a5 .hole { display: none; }
 		}
 
 		/* Calendar layout inside content */
@@ -231,11 +235,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<style>
-		/* Screen-only CC0 footer */
-		.cc0-footer { font-size: 10pt; color: #666; margin: 8mm 0; }
-		@media print { .cc0-footer { display: none; } }
-	</style>
+		<style>
+			/* Screen-only CC0 footer (base) */
+			.cc0-footer { font-size: 10pt; color: #666; margin: 4mm auto 8mm auto; width: 100%; max-width: 680px; padding: 0 6mm; text-align: center; }
+			@media print { .cc0-footer { display: none; } }
+		</style>
 	<!-- Front side -->
 	<div class="sheet front">
 		<div class="a5 left">
