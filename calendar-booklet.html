@@ -170,6 +170,34 @@
 			.cc0-footer { order: 5; margin-top: 4mm; margin-bottom: 8mm; }
 		}
 
+		/* Mobile-friendly screen layout adjustments */
+		@media screen and (max-width: 800px) {
+			body { gap: 6mm; margin: 6mm 0; }
+			/* Remove preview scaling; let panels fit viewport width */
+			.a5 { transform: none; width: 100%; max-width: 100%; }
+			/* Simplify margins for left/right panels on mobile */
+			.sheet .a5.left .header,
+			.sheet .a5.left .content,
+			.sheet .a5.right .header,
+			.sheet .a5.right .content { margin-left: 6mm; margin-right: 6mm; }
+			/* Use two columns for month grid on tablets */
+			.content .calendar { grid-template-columns: repeat(2, 1fr); }
+			/* Slightly larger text for readability */
+			.content .month { font-size: 9.5pt; }
+			.content .day { font-size: 100%; line-height: 1.1; }
+		}
+
+		@media screen and (max-width: 480px) {
+			body { gap: 5mm; margin: 5mm 0; }
+			/* Single column months on phones */
+			.content .calendar { grid-template-columns: 1fr; }
+			/* Comfortable reading sizes */
+			.content .month { font-size: 10pt; }
+			.content .day { font-size: 102%; line-height: 1.15; }
+			/* Footer spacing tighter on small screens */
+			.cc0-footer { margin-top: 3mm; margin-bottom: 6mm; }
+		}
+
 		/* Calendar layout inside content */
 		.content .calendar {
 			display: grid;
