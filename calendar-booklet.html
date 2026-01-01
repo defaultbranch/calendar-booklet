@@ -167,7 +167,7 @@
 			.sheet.back  .a5.right { order: 3; }
 			.sheet.front .a5.left  { order: 4; }
 			/* Ensure footer appears at the end on screen and sits near content */
-			.cc0-footer { order: 5; margin-top: 4mm; margin-bottom: 8mm; width: 100%; max-width: 680px; padding: 0 6mm; text-align: center; }
+			.cc0-footer { order: 5; margin-top: 4mm; margin-bottom: 8mm; width: 100%; max-width: 680px; padding: 0 1rem; box-sizing: border-box; text-align: center; }
 		}
 
 		/* Mobile-friendly screen layout adjustments */
@@ -197,7 +197,7 @@
 			.content .month { font-size: 10pt; }
 			.content .day { font-size: 102%; line-height: 1.15; }
 			/* Footer spacing tighter on small screens */
-			.cc0-footer { margin-top: 3mm; margin-bottom: 6mm; padding: 0 6mm; }
+			.cc0-footer { margin-top: 3mm; margin-bottom: 6mm; padding: 0 1rem; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; }
 			/* Ensure holes remain hidden on phones */
 			.a5 .hole { display: none; }
 		}
@@ -237,7 +237,7 @@
 <body>
 		<style>
 			/* Screen-only CC0 footer (base) */
-			.cc0-footer { font-size: 10pt; color: #666; margin: 4mm auto 8mm auto; width: 100%; max-width: 680px; padding: 0 6mm; text-align: center; }
+			.cc0-footer { font-size: 10pt; color: #666; margin: 4mm auto 8mm auto; width: 100%; max-width: 680px; padding: 0 1rem; box-sizing: border-box; text-align: center; }
 			@media print { .cc0-footer { display: none; } }
 		</style>
 	<!-- Front side -->
