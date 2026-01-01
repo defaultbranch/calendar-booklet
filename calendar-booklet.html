@@ -125,6 +125,7 @@
 		/* Optional screen preview scaling for comfortable on-screen viewing */
 		@media screen {
 			/* Stack all A5 panels vertically in desired reading order */
+			html, body { height: auto; }
 			body {
 				display: flex;
 				flex-direction: column;
@@ -165,6 +166,8 @@
 			.sheet.back  .a5.left  { order: 2; }
 			.sheet.back  .a5.right { order: 3; }
 			.sheet.front .a5.left  { order: 4; }
+			/* Ensure footer appears at the end on screen and sits near content */
+			.cc0-footer { order: 5; margin-top: 4mm; margin-bottom: 8mm; }
 		}
 
 		/* Calendar layout inside content */
