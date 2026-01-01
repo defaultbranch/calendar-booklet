@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>A5 Landscape Sheet</title>
+	<style>
+		/* Ensure the print sheet is A4 in landscape with no margins */
+		@page {
+			size: A4 landscape;
+			margin: 0;
+		}
+
+		html, body {
+			height: 100%;
+			font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+		}
+
+		/* Body as a neutral container; individual sheets control layout */
+		body {
+			margin: 0;
+			background: white;
+		}
+
+		/* One physical A4 sheet in landscape */
+		.sheet {
+			width: 297mm;   /* A4 landscape width */
+			height: 210mm;  /* A4 landscape height */
+			display: flex;
+			gap: 0;         /* No space between the two A5 regions */
+			break-inside: avoid;
+			box-sizing: border-box;
+		}
+
+		/* Ensure the next .sheet starts on a new printed page */
+		.sheet + .sheet {
+			break-before: page;
+			page-break-before: always; /* legacy fallback */
+		}
+
+		/* Each A5 block */
+		.a5 {
+			width: 148.5mm; /* Fill A4 width exactly with two panels */
+			height: 210mm;  /* A5 height */
+			box-sizing: border-box;
+			padding: 0;     /* Use framed content for exact border offsets */
+			border: 0.2mm solid #000; /* Light outer border of the A5 area */
+			position: relative;
+			overflow: hidden;
+			break-inside: avoid;
+		}
+
+		/* Header box: pale blue, starts 9mm from top, height 10mm */
+		.a5 .header {
+			position: absolute;
+			top: 9mm;       /* 9mm from top edge */
+			height: 10mm;   /* 1cm high */
+			border: 0.5mm solid #8ecae6;
+			box-sizing: border-box;
+			padding: 2mm;   /* small inner padding */
+		}
+
+		/* Content box: starts after 5mm gap below header, ends 10mm above bottom */
+		.a5 .content {
+			position: absolute;
+			top: 24mm;      /* 9 + 10 + 5 = 24mm from top edge */
+			bottom: 10mm;   /* 1cm from bottom edge */
+			border: 0.5mm solid #8ecae6;
+			box-sizing: border-box;
+			padding: 4mm;   /* comfortable content padding */
+		}
+
+		/* Left panel offsets: outer edge 6mm, inner (fold) edge 21mm */
+		.sheet .a5.left .header,
+		.sheet .a5.left .content {
+			left: 6mm;
+			right: 21mm;
+		}
+
+		/* Right panel offsets: inner (fold) edge 21mm, outer edge 6mm */
+		.sheet .a5.right .header,
+		.sheet .a5.right .content {
+			left: 21mm;
+			right: 6mm;
+		}
+
+		/* Hole markers: 5mm diameter circles for binding */
+		.a5 .hole {
+			position: absolute;
+			width: 5mm;
+			height: 5mm;
+			border: 0.3mm solid #000;
+			border-radius: 50%;
+			box-sizing: border-box;
+			background: white; /* ensures clear mark */
+			z-index: 10;
+		}
+
+		/* Horizontal positioning: centers 12mm from folding edge */
+		.sheet .a5.left .hole { /* folding edge is right side */
+			right: 9.5mm; /* 12mm - 2.5mm radius */
+		}
+		.sheet .a5.right .hole { /* folding edge is left side */
+			left: 9.5mm; /* 12mm - 2.5mm radius */
+		}
+
+		/* Vertical positions */
+		.hole.top-27 { top: 24.5mm; }      /* 27mm - 2.5mm radius */
+		.hole.bottom-27 { bottom: 24.5mm; }/* 27mm - 2.5mm radius */
+		.hole.top-65 { top: 62.5mm; }      /* 65mm - 2.5mm radius */
+		.hole.bottom-65 { bottom: 62.5mm; }/* 65mm - 2.5mm radius */
+
+		@media print {
+			body { background: none; }
+			.sheet { margin: 0; }
+			/* Hide year input when printing */
+			#year-input { display: none; }
+			/* Reduce calendar sizing ~5% to avoid overflow */
+			.content .month { font-size: 8.55pt; }
+			.content .month-title { margin-bottom: 1.9mm; }
+			.content .days { gap: 1mm; }
+			.content .day { font-size: 98%; line-height: 1.06; padding-bottom: 0.5mm; border-bottom-width: 0.19mm; }
+		}
+
+
+		/* Optional screen preview scaling for comfortable on-screen viewing */
+		@media screen {
+			/* Stack all A5 panels vertically in desired reading order */
+			body {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 8mm;
+				margin: 8mm 0;
+			}
+
+			/* Flatten sheet containers so .a5 items share one flex context */
+			.sheet { display: contents; }
+
+			/* Slight scale for comfortable preview */
+			.a5 {
+				transform: scale(0.92);
+				transform-origin: top center;
+			}
+
+			/* Screen-only: allow vertical content to grow naturally */
+			.a5 { height: auto; overflow: visible; }
+			.a5 .header,
+			.a5 .content { position: static; width: auto; }
+			.a5 .header { margin-top: 9mm; min-height: 10mm; }
+			.a5 .content { margin-top: 5mm; margin-bottom: 10mm; }
+
+			/* Replace absolute offsets with margins on screen */
+			.sheet .a5.left .header,
+			.sheet .a5.left .content { left: auto; right: auto; margin-left: 6mm; margin-right: 21mm; }
+			.sheet .a5.right .header,
+			.sheet .a5.right .content { left: auto; right: auto; margin-left: 21mm; margin-right: 6mm; }
+
+			/* Visual stacking order (screen-only):
+			   1) Front Right A5
+			   2) Back Left A5
+			   3) Back Right A5
+			   4) Front Left A5
+			*/
+			.sheet.front .a5.right { order: 1; }
+			.sheet.back  .a5.left  { order: 2; }
+			.sheet.back  .a5.right { order: 3; }
+			.sheet.front .a5.left  { order: 4; }
+		}
+
+		/* Calendar layout inside content */
+		.content .calendar {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 3mm;
+		}
+		.content .month {
+			border: 0.3mm solid #8ecae6;
+			padding: 2mm;
+			box-sizing: border-box;
+			font-size: 9pt;
+		}
+		.content .month-title {
+			text-align: center;
+			font-weight: 600;
+			margin-bottom: 2mm;
+		}
+		.content .days {
+			display: grid;
+			grid-template-columns: 1fr; /* vertical stack */
+			gap: 1mm;
+		}
+		.content .day {
+			border-bottom: 0.2mm dotted #cfe9f5;
+			padding-bottom: 0.5mm;
+		}
+		.content .day.weekend {
+			color: #c00; /* print Saturdays/Sundays in red */
+		}
+	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<style>
+		/* Screen-only CC0 footer */
+		.cc0-footer { font-size: 10pt; color: #666; margin: 8mm 0; }
+		@media print { .cc0-footer { display: none; } }
+	</style>
+	<!-- Front side -->
+	<div class="sheet front">
+		<div class="a5 left">
+			<div class="header">
+				<!-- Empty header on Page 4 -->
+			</div>
+			<div class="content"></div>
+			<!-- Hole markers -->
+			<div class="hole top-27"></div>
+			<div class="hole bottom-27"></div>
+			<div class="hole top-65"></div>
+			<div class="hole bottom-65"></div>
+		</div>
+		<div class="a5 right">
+			<div class="header">
+				<input id="year-input" type="number" min="1900" max="2100" style="width: 28mm;" placeholder="Year">
+			</div>
+			<div class="content"></div>
+			<!-- Hole markers -->
+			<div class="hole top-27"></div>
+			<div class="hole bottom-27"></div>
+			<div class="hole top-65"></div>
+			<div class="hole bottom-65"></div>
+		</div>
+	</div>
+
+	<!-- Back side -->
+	<div class="sheet back">
+		<div class="a5 left">
+			<div class="header">
+				<!-- Empty header on Page 2 -->
+			</div>
+			<div class="content"></div>
+			<!-- Hole markers -->
+			<div class="hole top-27"></div>
+			<div class="hole bottom-27"></div>
+			<div class="hole top-65"></div>
+			<div class="hole bottom-65"></div>
+		</div>
+		<div class="a5 right">
+			<div class="header">
+				<!-- Empty header on Page 3 -->
+			</div>
+			<div class="content"></div>
+			<!-- Hole markers -->
+			<div class="hole top-27"></div>
+			<div class="hole bottom-27"></div>
+			<div class="hole top-65"></div>
+			<div class="hole bottom-65"></div>
+		</div>
+	</div>
+
+	<div class="cc0-footer">
+		This work is dedicated to the public domain (CC0 1.0). 
+		<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">More info</a>.
+	</div>
+
+	<script>
+	(function() {
+	  const pages = {
+	    1: document.querySelector('.sheet.front .a5.right .content'),
+	    2: document.querySelector('.sheet.back  .a5.left  .content'),
+	    3: document.querySelector('.sheet.back  .a5.right .content'),
+	    4: document.querySelector('.sheet.front .a5.left  .content')
+	  };
+
+	  const monthNames = [
+	    'January','February','March','April','May','June',
+	    'July','August','September','October','November','December'
+	  ];
+	  const weekdayNames = ['SU','MO','TU','WE','TH','FR','SA'];
+
+	  function daysInMonth(year, monthIndex) {
+	    return new Date(year, monthIndex + 1, 0).getDate();
+	  }
+
+	  function clearCalendars() {
+	    Object.values(pages).forEach(el => { if (el) el.innerHTML = ''; });
+	  }
+
+	  function generateCalendar(year) {
+	    clearCalendars();
+	    // Create containers per page
+	    const containers = {
+	      1: document.createElement('div'),
+	      2: document.createElement('div'),
+	      3: document.createElement('div'),
+	      4: document.createElement('div')
+	    };
+	    Object.values(containers).forEach(c => c.className = 'calendar');
+
+	    // Distribute 12 months: 3 per page
+	    for (let m = 0; m < 12; m++) {
+	      const pageNum = Math.floor(m / 3) + 1; // 0-2 -> 1, 3-5 -> 2, etc.
+	      const monthEl = document.createElement('div');
+	      monthEl.className = 'month';
+
+	      const title = document.createElement('div');
+	      title.className = 'month-title';
+	      const yy = String(year % 100).padStart(2, '0');
+	      title.textContent = monthNames[m] + " '" + yy;
+	      monthEl.appendChild(title);
+
+	      const days = document.createElement('div');
+	      days.className = 'days';
+
+	      const count = daysInMonth(year, m);
+	      for (let d = 1; d <= count; d++) {
+	        const date = new Date(year, m, d);
+	        const dayIdx = date.getDay(); // 0=Sun ... 6=Sat
+	        const day = document.createElement('div');
+	        day.className = 'day';
+	        if (dayIdx === 0 || dayIdx === 6) day.classList.add('weekend');
+	        day.textContent = d + ' ' + weekdayNames[dayIdx];
+	        days.appendChild(day);
+	      }
+
+	      monthEl.appendChild(days);
+	      containers[pageNum].appendChild(monthEl);
+	    }
+
+	    // Attach to page content areas
+	    for (let p = 1; p <= 4; p++) {
+	      if (pages[p]) pages[p].appendChild(containers[p]);
+	    }
+	  }
+
+	  // Initialize
+	  const yearInput = document.getElementById('year-input');
+	  const defaultYear = new Date().getFullYear();
+	  if (yearInput) {
+	    yearInput.value = defaultYear;
+	    yearInput.addEventListener('change', () => {
+	      const y = parseInt(yearInput.value, 10);
+	      const year = isNaN(y) ? defaultYear : y;
+	      generateCalendar(year);
+	    });
+	  }
+
+	  generateCalendar(yearInput && yearInput.value ? parseInt(yearInput.value, 10) : defaultYear);
+	})();
+	</script>
+</body>
+</html>
