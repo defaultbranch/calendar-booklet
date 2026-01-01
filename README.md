@@ -2,6 +2,8 @@
 
 This will give you [calendar-booklet.html](https://defaultbranch.github.io/calendar-booklet/calendar-booklet.html) - open it in your web browser, enter the year, and then go print - on double-sided A4, you will get an A5 booklet with three months per page. This is a plain HTML+JavaScript file, it should work on any current browser and give you the A4/A5 calendar booklet to print, no other dependencies involved - download, copy, share.
 
+![A5 booklet printout preview](printout.jpg)
+
 
 ## Print Settings
 
