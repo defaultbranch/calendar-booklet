@@ -12,9 +12,9 @@ A4, duplex, flip on short edge, 100% scale.
 
 ## Why
 
-This was created as a vibe-coding experiment. Browsers can do anything these days. Some years ago "HAL" - hardware abstraction layer, not the crazy machine from 1968, or as someone mentioned, IBM one letter less - now Browsers are machine+OS+runtime abstraction layers; but thanks to the good abstraction, all this can be bundled into HTML, often a single page 😀.
+This was created as a vibe-coding experiment. Browsers can do anything these days. Some decades ago HAL, the hardware abstraction layer - not the crazy machine from 1968, or as people observed: IBM one letter less - was conceived. These days, browsers are machine+OS+runtime abstraction layers; and thanks to abstraction at its best, a lot of things can be bundled into HTML, often a single document 😀.
 
-So tired of rip-off "free calendars", I asked my coding AI for such an HTML page, this is it. As long as AI is still available for free, thanks to the many crazy investors and sponsors these days 😀 - this may change soon one way or the other, but currently we live in great times (bar the ongoing homicides, global disbalances, environmental exploitation, and brain-damaged soccer fans)
+So, tired of rip-off "free calendars", I asked my coding AI for such an HTML page, and here it is. So long as AI is still available for free, thanks to the many crazy investors and sponsors these days 😀 - this may change soon one way or the other -, we currently live in great times (bar the ongoing homicides, global disbalances, environmental exploitation, and brain-damaged soccer fans).
 
 
 ## License
